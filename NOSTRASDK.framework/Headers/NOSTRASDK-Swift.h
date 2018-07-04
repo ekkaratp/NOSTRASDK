@@ -588,6 +588,62 @@ SWIFT_CLASS("_TtC9NOSTRASDK15NTContentSource")
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end
 
+/// The AEC country that’s provided by NOSTRA
+/// <ul>
+///   <li>
+///     unknown: 0
+///   </li>
+///   <li>
+///     brunei: 673
+///   </li>
+///   <li>
+///     cambodia: 855
+///   </li>
+///   <li>
+///     indonesia: 62
+///   </li>
+///   <li>
+///     laos: 856
+///   </li>
+///   <li>
+///     malaysia: 60
+///   </li>
+///   <li>
+///     myamar: 95
+///   </li>
+///   <li>
+///     singapore: 65
+///   </li>
+///   <li>
+///     thailand: 66
+///   </li>
+///   <li>
+///     vietnam: 84
+///   </li>
+/// </ul>
+typedef SWIFT_ENUM(NSInteger, NTCountry_c) {
+/// Unknown.
+  NTCountry_cUnknown = 0,
+/// Brunei.
+  NTCountry_cBrunei = 673,
+/// Cambodia.
+  NTCountry_cCambodia = 855,
+/// Indonesia.
+  NTCountry_cIndonesia = 62,
+/// Laos.
+  NTCountry_cLaos = 856,
+/// Malaysia.
+  NTCountry_cMalaysia = 60,
+/// Myamar.
+  NTCountry_cMyamar = 95,
+/// Singapore.
+  NTCountry_cSingapore = 65,
+/// Thailand.
+  NTCountry_cThailand = 66,
+/// Vietnam.
+  NTCountry_cVietnam = 84,
+};
+
 
 /// A describe stops.
 SWIFT_CLASS("_TtC9NOSTRASDK11NTDirection")
@@ -645,10 +701,17 @@ SWIFT_CLASS("_TtC9NOSTRASDK22NTEntertainmentService")
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end
 
+@class NTSpatialReference;
 
 /// An envelope object.
 SWIFT_CLASS("_TtC9NOSTRASDK10NTEnvelope")
 @interface NTEnvelope : NTResult
+/// A spatial reference of envelope
+@property (nonatomic, readonly, strong) NTSpatialReference * _Nullable spatialReference;
+@property (nonatomic, readonly) double xmax_c;
+@property (nonatomic, readonly) double xmin_c;
+@property (nonatomic, readonly) double ymax_c;
+@property (nonatomic, readonly) double ymin_c;
 @end
 
 
@@ -730,6 +793,24 @@ SWIFT_CLASS("_TtC9NOSTRASDK13NTFuelService")
 @interface NTFuelService : NTService
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
+
+/// Types of graphic
+/// <ul>
+///   <li>
+///     point: 1
+///   </li>
+///   <li>
+///     polyline: 2
+///   </li>
+///   <li>
+///     polygon: 3
+///   </li>
+/// </ul>
+typedef SWIFT_ENUM(NSInteger, NTGraphicType_c) {
+  NTGraphicType_cPoint = 1,
+  NTGraphicType_cPolyline = 2,
+  NTGraphicType_cPolygon = 3,
+};
 
 
 /// Instances of this class represent parameters for NTIdentifyService. Parameters specify the criteria  according to which country should be identified in the map. Parameters are passed as an argument to execute: or executeAsync:Completion on NTIdentifyService.
@@ -856,22 +937,101 @@ SWIFT_CLASS("_TtC9NOSTRASDK23NTLocationSearchService")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+/// A type of layers.
+/// <ul>
+///   <li>
+///     unknown: 0
+///   </li>
+///   <li>
+///     basemap: 1
+///   </li>
+///   <li>
+///     imagery: 2
+///   </li>
+///   <li>
+///     specialLayer: 3
+///   </li>
+/// </ul>
+typedef SWIFT_ENUM(NSInteger, NTMapLayerType_c) {
+/// Unknown.
+  NTMapLayerType_cUnknown = 0,
+/// Basemap.
+  NTMapLayerType_cBasemap = 1,
+/// Imagery.
+  NTMapLayerType_cImagery = 2,
+/// Special layer.
+  NTMapLayerType_cSpecialLayer = 3,
+};
+
+@class NTMapServiceInfo;
+enum NTMapServiceType_c : NSInteger;
+@class NTPoint;
 
 /// A result of map permission returns from NTMapPermissionService.
 SWIFT_CLASS("_TtC9NOSTRASDK21NTMapPermissionResult")
 @interface NTMapPermissionResult : NTResult
+@property (nonatomic, readonly) enum NTCountry_c country_c;
+/// Service Name.
+@property (nonatomic, readonly, copy) NSString * _Nullable name;
+/// Service ID.
+@property (nonatomic, readonly) NSInteger serviceId;
+/// Sort index number.
+@property (nonatomic, readonly) NSInteger sortedIndex;
+/// Default level of service to zoom in.
+@property (nonatomic, readonly) NSInteger defaultLevel;
+/// Default minimum level of service.
+@property (nonatomic, readonly) NSInteger minLevel;
+/// Default maximum level of service.
+@property (nonatomic, readonly) NSInteger maxLevel;
+/// A local information of a service.
+@property (nonatomic, readonly, strong) NTMapServiceInfo * _Nullable localService;
+/// An english information of a service.
+@property (nonatomic, readonly, strong) NTMapServiceInfo * _Nullable englishService;
+@property (nonatomic, readonly) enum NTMapLayerType_c layerType_c;
+@property (nonatomic, readonly) enum NTMapServiceType_c mapServiceType_c;
+@property (nonatomic, readonly) enum NTGraphicType_c graphicType_c;
+/// Array that contains service IDs if the map service should be use other service in this lists, null if not.
+@property (nonatomic, readonly, copy) NSArray<NSNumber *> * _Nonnull dependMap;
+/// Default zoom point of service that contain latitude and longitude.
+@property (nonatomic, readonly, strong) NTPoint * _Nullable defaultLocation;
+/// Default envelope of service that contain x-min, y-min, x-max and y-max
+@property (nonatomic, readonly, strong) NTEnvelope * _Nullable envelope;
 @end
 
 
 /// A set of map permission result return from NTMapPermissionService.
 SWIFT_CLASS("_TtC9NOSTRASDK24NTMapPermissionResultSet")
 @interface NTMapPermissionResultSet : NTResult
+/// A set of result
+@property (nonatomic, readonly, copy) NSArray<NTMapPermissionResult *> * _Nullable results;
+/// The method uses to find result from set of map permission by using service id.
+/// \param serviceId Id of service
+///
+///
+/// returns:
+/// An object of NTMapPermissionResult (It may be nil if service id does not existed.)
+- (NTMapPermissionResult * _Nullable)mapPermissionWithServiceId:(NSInteger)serviceId SWIFT_WARN_UNUSED_RESULT;
 @end
 
 
 /// This is a core service for map of NOSTRA. You can request to this service after received NOSTRA’s key and it will return the list of services that you have permission.
 SWIFT_CLASS("_TtC9NOSTRASDK22NTMapPermissionService")
 @interface NTMapPermissionService : NTService
+/// Execute map permission service. It relies on map permission service of the web service API.
+/// The result returns only one of POI matching specificed criteria.
+///
+/// throws:
+/// Information about the error returned by the service.
+///
+/// returns:
+/// A set of map services.
++ (NTMapPermissionResultSet * _Nullable)executeAndReturnError:(NSError * _Nullable * _Nullable)error SWIFT_WARN_UNUSED_RESULT;
+/// Execute map permission service. It relies on map permission service of the web service API.
+/// \param Completion Block call when the map permission service has completely loaded.
+/// The method also be called when the map permission service has error.
+/// This block has a map permission result and an information about the error returned by the service.
+///
++ (void)executeAsync:(void (^ _Nonnull)(NTMapPermissionResultSet * _Nullable, NSError * _Nullable))Completion;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -879,8 +1039,48 @@ SWIFT_CLASS("_TtC9NOSTRASDK22NTMapPermissionService")
 /// An NTMapServiceInfo Class.
 SWIFT_CLASS("_TtC9NOSTRASDK16NTMapServiceInfo")
 @interface NTMapServiceInfo : NSObject
+/// An url of map service that provides to initiate the layer.
+@property (nonatomic, copy) NSURL * _Nullable url;
+/// A token of map service that uses to authenticate the map service.
+@property (nonatomic, copy) NSString * _Nullable token;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 @end
+
+/// A type of map service.
+/// <ul>
+///   <li>
+///     unknown
+///   </li>
+///   <li>
+///     tiledMapService: Tiled map service
+///   </li>
+///   <li>
+///     dynamicMapService: Dynamic map service
+///   </li>
+///   <li>
+///     featureService: Feature server service
+///   </li>
+///   <li>
+///     webMapService: Web map service
+///   </li>
+///   <li>
+///     openSteetMap: Open stree map service
+///   </li>
+/// </ul>
+typedef SWIFT_ENUM(NSInteger, NTMapServiceType_c) {
+/// Unknown.
+  NTMapServiceType_cUnknown = 0,
+/// Tiled map service.
+  NTMapServiceType_cTiledMapService = 1,
+/// Dynamic map service.
+  NTMapServiceType_cDynamicMapService = 2,
+/// Feature server service.
+  NTMapServiceType_cFeatureService = 3,
+/// Web map service
+  NTMapServiceType_cWebMapService = 4,
+/// Open stree map service
+  NTMapServiceType_cOpenSteetMap = 5,
+};
 
 
 /// A NTMultiModalDirection object.
@@ -967,7 +1167,27 @@ SWIFT_CLASS("_TtC9NOSTRASDK17NTPhoneNumberInfo")
 /// Point
 SWIFT_CLASS("_TtC9NOSTRASDK7NTPoint")
 @interface NTPoint : NSObject
+/// X coordinate
+@property (nonatomic, readonly) double x;
+/// Y coordinate
+@property (nonatomic, readonly) double y;
+/// latitude
+@property (nonatomic, readonly) double latitude;
+/// longitude
+@property (nonatomic, readonly) double longitude;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
+/// Initialize NTPoint Object.
+/// \param x X coordinate
+///
+/// \param y Y coordinate
+///
+- (nonnull instancetype)initWithX:(double)x y:(double)y OBJC_DESIGNATED_INITIALIZER;
+/// Initialize NTPoint Object.
+/// \param latitude Latitude
+///
+/// \param longitude Longitude
+///
+- (nonnull instancetype)initWithLatitude:(double)latitude longitude:(double)longitude OBJC_DESIGNATED_INITIALIZER;
 @end
 
 
@@ -1036,12 +1256,23 @@ SWIFT_CLASS("_TtC9NOSTRASDK14NTRouteService")
 /// An NTRoutingPoint class.
 SWIFT_CLASS("_TtC9NOSTRASDK14NTRoutingPoint")
 @interface NTRoutingPoint : NTPoint
+/// Intializes NTRoutingPoint object.
+/// \param latitude Latitude
+///
+/// \param longitude Longitude
+///
+- (nonnull instancetype)initWithLatitude:(double)latitude longitude:(double)longitude SWIFT_UNAVAILABLE;
+- (nonnull instancetype)initWithX:(double)x y:(double)y SWIFT_UNAVAILABLE;
 @end
 
 
 /// A class representing the NOSTRA SDK Environment.
 SWIFT_CLASS("_TtC9NOSTRASDK16NTSDKEnvironment")
 @interface NTSDKEnvironment : NSObject
+/// This method provide for set SDK environment.
+/// \param apiKey A NOSTRA API key.
+///
++ (void)setAPIKey:(NSString * _Nonnull)apiKey;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
@@ -1125,6 +1356,16 @@ SWIFT_CLASS("_TtC9NOSTRASDK18NTShortLinkService")
 /// A spatial reference object.
 SWIFT_CLASS("_TtC9NOSTRASDK18NTSpatialReference")
 @interface NTSpatialReference : NTResult
+/// A constant of WGS84
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) NSInteger WGS84;)
++ (NSInteger)WGS84 SWIFT_WARN_UNUSED_RESULT;
+/// A constant of Webmercator
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly) NSInteger WebMercator;)
++ (NSInteger)WebMercator SWIFT_WARN_UNUSED_RESULT;
+/// The lastest WKID
+@property (nonatomic, readonly) NSInteger lastestWkid;
+/// WKID
+@property (nonatomic, readonly) NSInteger wkid;
 @end
 
 
